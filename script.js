@@ -1,6 +1,10 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições! 
 
+// const { fetchItem } = require("./helpers/fetchItem");
+
+// const { fetchItem } = require("./helpers/fetchItem");
+
 /* const { fetchProducts } = require("./helpers/fetchProducts"); */
 
 // Fique a vontade para modificar o código já escrito e criar suas próprias funções!
@@ -9,6 +13,7 @@
  * @param {string} imageSource - URL da imagem.
  * @returns {Element} Elemento de imagem do produto.
  */
+const cartOL = document.getElementsByClassName('cart__items')[0];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -39,6 +44,18 @@ const createCustomElement = (element, className, innerText) => {
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
+const cartItemClickListener = () => {
+  cartOL.removeChild();
+};
+
+ const createCartItemElement = ({ id, title, price }) => {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+  li.addEventListener('click', () => li.remove());
+  cartOL.appendChild(li);
+};
+
 const createProductItemElement = ({ id, title, thumbnail }) => {
   const section = document.createElement('section');
   section.className = 'item';
@@ -46,16 +63,17 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   section.appendChild(createCustomElement('span', 'item_id', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  button.addEventListener('click', async () => {
+    createCartItemElement(await fetchItem(id));
+  });
+  section.appendChild(button);
+  // section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   const fatherSection = document.getElementsByClassName('items')[0];
   fatherSection.appendChild(section);
 };
 
-const logProducts = async () => {
-  const array = await fetchProducts('computador');
-  array.forEach(createProductItemElement);
-  };
 /**
  * Função que recupera o ID do produto passado como parâmetro.
  * @param {Element} product - Elemento do produto.
@@ -71,13 +89,15 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  * @param {string} product.price - Preço do produto.
  * @returns {Element} Elemento de um item do carrinho.
  */
-const createCartItemElement = ({ id, title, price }) => {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
+
+const addOnCart = async () => {
+  
 };
+
+const logProducts = async () => {
+  const array = await fetchProducts('computador');
+  array.forEach(createProductItemElement);
+  };
 
 window.onload = () => { 
   logProducts();
