@@ -14,6 +14,7 @@
  * @returns {Element} Elemento de imagem do produto.
  */
 const cartOL = document.getElementsByClassName('cart__items')[0];
+const buttonEmptyCart = document.getElementsByClassName('empty-cart')[0];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -88,6 +89,11 @@ const logProducts = async () => {
   const array = await fetchProducts('computador');
   array.forEach(createProductItemElement);
   };
+
+buttonEmptyCart.addEventListener('click', () => {
+  const cartItems = document.querySelectorAll('.cart__item');
+  cartItems.forEach((e) => e.remove());
+});
 
 window.onload = () => { 
   logProducts();
