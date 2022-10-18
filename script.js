@@ -44,9 +44,6 @@ const createCustomElement = (element, className, innerText) => {
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
-const cartItemClickListener = () => {
-  cartOL.removeChild();
-};
 
  const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
@@ -64,12 +61,9 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
   const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-  button.addEventListener('click', async () => {
-    createCartItemElement(await fetchItem(id));
-  });
+  button.addEventListener('click', async () => createCartItemElement(await fetchItem(id)));
   section.appendChild(button);
   // section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
   const fatherSection = document.getElementsByClassName('items')[0];
   fatherSection.appendChild(section);
 };
@@ -89,10 +83,6 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  * @param {string} product.price - Preço do produto.
  * @returns {Element} Elemento de um item do carrinho.
  */
-
-const addOnCart = async () => {
-  
-};
 
 const logProducts = async () => {
   const array = await fetchProducts('computador');
