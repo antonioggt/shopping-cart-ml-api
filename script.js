@@ -64,7 +64,7 @@ const createCustomElement = (element, className, innerText) => {
   totalPriceParagraph.innerText = totalPrice;
 };
 
-const createProductItemElement = ({ id, title, thumbnail, price }) => {
+const createProductItemElement = ({ id, title, thumbnail }) => {
   const section = document.createElement('section');
   section.className = 'item';
 
