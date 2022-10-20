@@ -15,6 +15,7 @@
  */
 const cartOL = document.getElementsByClassName('cart__items')[0];
 const buttonEmptyCart = document.getElementsByClassName('empty-cart')[0];
+const totalPriceParagraph = document.getElementsByClassName('total-price')[0];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -52,9 +53,18 @@ const createCustomElement = (element, className, innerText) => {
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
   li.addEventListener('click', () => li.remove());
   cartOL.appendChild(li);
+
+  let totalPrice = Number(totalPriceParagraph.innerText);
+  if (totalPrice === 0) {
+    totalPrice = price;
+  }
+  if (totalPrice !== 0) {
+    totalPrice += price;
+  }
+  totalPriceParagraph.innerText = totalPrice;
 };
 
-const createProductItemElement = ({ id, title, thumbnail }) => {
+const createProductItemElement = ({ id, title, thumbnail, price }) => {
   const section = document.createElement('section');
   section.className = 'item';
 
