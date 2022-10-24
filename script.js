@@ -1,6 +1,12 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições! 
 
+// const getSavedCartItems = require("./helpers/getSavedCartItems");
+
+// const saveCartItems2 = require("./helpers/saveCartItems2");
+
+// const saveCartItems2 = require('./helpers/saveCartItems2');
+
 // const { fetchItem } = require("./helpers/fetchItem");
 
 // const { fetchItem } = require("./helpers/fetchItem");
@@ -16,6 +22,24 @@
 const cartOL = document.getElementsByClassName('cart__items')[0];
 const buttonEmptyCart = document.getElementsByClassName('empty-cart')[0];
 const totalPriceParagraph = document.getElementsByClassName('total-price')[0];
+
+/* TESTE ----------------------------------------------- */
+/* TESTE ----------------------------------------------- */
+/* TESTE ----------------------------------------------- */
+
+const saveCartItems2 = () => {
+  const cartItemsNodeList = document.querySelectorAll('.cart__item');
+  const arr = [];
+  cartItemsNodeList.forEach((e) => {
+    arr.push(e.innerText);
+  });
+  const cartItems = JSON.stringify(arr);
+  localStorage.setItem('cartItems', cartItems);
+};
+
+/* TESTE ----------------------------------------------- */
+/* TESTE ----------------------------------------------- */
+/* TESTE ----------------------------------------------- */
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -47,21 +71,28 @@ const createCustomElement = (element, className, innerText) => {
  * @returns {Element} Elemento de produto.
  */
 
+ const preçototal = () => { 
+let totalPrice = Number(totalPriceParagraph.innerText);
+ if (totalPrice === 0) {
+   totalPrice = price;
+ }
+ if (totalPrice !== 0) {
+   totalPrice += price;
+ }
+ totalPriceParagraph.innerText = totalPrice;
+};
+
  const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
   li.addEventListener('click', () => li.remove());
+  li.addEventListener('click', () => saveCartItems2());
+  
   cartOL.appendChild(li);
 
-  let totalPrice = Number(totalPriceParagraph.innerText);
-  if (totalPrice === 0) {
-    totalPrice = price;
-  }
-  if (totalPrice !== 0) {
-    totalPrice += price;
-  }
-  totalPriceParagraph.innerText = totalPrice;
+  saveCartItems2();
+  // preçototal();
 };
 
 const createProductItemElement = ({ id, title, thumbnail }) => {
@@ -105,6 +136,42 @@ buttonEmptyCart.addEventListener('click', () => {
   cartItems.forEach((e) => e.remove());
 });
 
+/* TESTE -------------------------------------------------------- */
+/* TESTE -------------------------------------------------------- */
+/* TESTE -------------------------------------------------------- */
+
+const helper = (event) => {
+  const vetorLS = JSON.parse(localStorage.getItem('cartItems'));
+  const elementString = vetorLS.find((string) => string === event.target.innerText);
+  const index = vetorLS.indexOf(elementString);
+  vetorLS.splice(index, 1);
+  const itemToSave = JSON.stringify(vetorLS);
+  localStorage.setItem('cartItems', itemToSave);
+};
+
+const getSavedCartItems2 = () => {
+let arr = JSON.parse(localStorage.getItem('cartItems'));
+if (arr === null) {
+  arr = [];
+}
+if (arr.length > 0) {  
+  arr.forEach((e) => {
+  const li = document.createElement('li');
+  li.innerText = e;
+  li.addEventListener('click', () => {
+    li.remove();
+  });
+  li.addEventListener('click', helper);
+  cartOL.appendChild(li);
+  });
+}
+};
+
+/* TESTE -------------------------------------------------------- */
+/* TESTE -------------------------------------------------------- */
+/* TESTE -------------------------------------------------------- */
+
 window.onload = () => { 
   logProducts();
+  getSavedCartItems2();
 };
